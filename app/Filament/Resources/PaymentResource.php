@@ -54,12 +54,10 @@ class PaymentResource extends Resource
                     ->options(PaymentStatus::class),
             ])
             ->actions([
-                EditAction::make(),
+                //
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

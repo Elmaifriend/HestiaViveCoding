@@ -93,7 +93,7 @@ class AmenityResource extends Resource
                 //
             ])
             ->actions([
-                //EditAction::make(),
+                //
             ])
             ->bulkActions([
                 //

@@ -53,12 +53,10 @@ class InvitationResource extends Resource
                     ->options(InvitationStatus::class),
             ])
             ->actions([
-                EditAction::make(),
+                //
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

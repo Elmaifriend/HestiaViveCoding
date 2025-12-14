@@ -56,12 +56,10 @@ class ProductResource extends Resource
                     ->options(ProductStatus::class),
             ])
             ->actions([
-                EditAction::make(),
+                //
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

@@ -88,12 +88,10 @@ class IncidentResource extends Resource
                     ->options(IncidentStatus::class),
             ])
             ->actions([
-                EditAction::make(),
+                //
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

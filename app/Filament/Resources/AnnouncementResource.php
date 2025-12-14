@@ -70,7 +70,7 @@ class AnnouncementResource extends Resource
                     ->options(AnnouncementStatus::class),
             ])
             ->actions([
-                //EditAction::make(),
+                //
             ])
             ->bulkActions([
                 //

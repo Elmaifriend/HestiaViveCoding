@@ -84,12 +84,10 @@ class ReservationResource extends Resource
                     ->relationship('amenity', 'name'),
             ])
             ->actions([
-                EditAction::make(),
+                //
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 

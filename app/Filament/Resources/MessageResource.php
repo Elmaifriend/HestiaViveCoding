@@ -50,8 +50,7 @@ class MessageResource extends Resource
                 //
             ])
             ->actions([
-                //EditAction::make(),
-                //ViewAction::make(),
+                //
             ])
             ->bulkActions([
                 //
