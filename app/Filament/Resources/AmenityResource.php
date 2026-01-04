@@ -2,20 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AmenityResource\Pages;
+use Filament\Tables;
 use App\Models\Amenity;
-use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Actions\EditAction;
+use Filament\Resources\Resource;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
-use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Forms\Components\FileUpload;
+use App\Filament\Resources\AmenityResource\Pages;
 
 class AmenityResource extends Resource
 {
@@ -33,34 +35,58 @@ class AmenityResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('General Information')
-                    ->description('Basic details about the amenity.')
+                Section::make('Información General')
+                    ->description('Detalles básicos de la instalación o área común.')
+                    ->icon('heroicon-o-information-circle')
                     ->schema([
                         TextInput::make('name')
+                            ->label('Nombre de la Amenidad')
+                            ->placeholder('Ej. Gimnasio, Salón de Usos Múltiples')
                             ->required()
                             ->maxLength(255)
-                            ->columnSpan(1),
+                            ->prefixIcon('heroicon-m-tag')
+                            ->columnSpan(2),
+
                         TextInput::make('location')
+                            ->label('Ubicación Exacta')
+                            ->placeholder('Ej. Torre A, Planta Baja')
                             ->required()
                             ->maxLength(255)
+                            ->prefixIcon('heroicon-m-map-pin')
                             ->columnSpan(1),
+
                         TextInput::make('capacity')
+                            ->label('Aforo Máximo')
                             ->numeric()
                             ->default(10)
                             ->required()
+                            ->prefixIcon('heroicon-m-users')
+                            ->suffix('personas')
                             ->columnSpan(1),
-                    ])->columns(3),
 
-                Section::make('Additional Details')
-                    ->schema([
                         Textarea::make('description')
+                            ->label('Normas y Descripción')
+                            ->placeholder('Indica las reglas de uso, horarios o equipamiento disponible...')
+                            ->rows(3)
                             ->columnSpanFull(),
+                    ])->columns(2),
+
+                Section::make('Galería')
+                    ->description('Imagen visible para los residentes en la app.')
+                    ->icon('heroicon-o-photo')
+                    ->collapsible()
+                    ->schema([
                         FileUpload::make('photo_url')
-                            ->label('Photo')
+                            ->label('Fotografía de Portada')
                             ->image()
+                            ->imageEditor()
+                            ->openable()
+                            ->imagePreviewHeight('250')
+                            ->panelAspectRatio('2:1')
+                            ->panelLayout('integrated')
                             ->directory('amenities')
                             ->visibility('public')
-                            ->openable(),
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
@@ -69,34 +95,44 @@ class AmenityResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable()
-                    ->weight('bold'),
-                TextColumn::make('location')
-                    ->searchable()
-                    ->icon('heroicon-m-map-pin'),
-                TextColumn::make('capacity')
-                    ->numeric()
-                    ->sortable()
-                    ->badge(),
                 ImageColumn::make('photo_url')
-                    ->label('Photo')
-                    ->disk('public')
-                    ->circular(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Vista')
+                    ->disk('public'),
+
+                TextColumn::make('name')
+                    ->label('Amenidad')
+                    ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->description(fn(Amenity $record) => $record->location)
+                    ->wrap(),
+
+                TextColumn::make('capacity')
+                    ->label('Capacidad')
+                    ->sortable()
+                    ->badge()
+                    ->numeric()
+                    ->icon('heroicon-m-user-group')
+                    ->color('primary')
+                    ->formatStateUsing(fn(string $state): string => "{$state} Pers."),
+
+                TextColumn::make('created_at')
+                    ->label('Alta en Sistema')
+                    ->dateTime('d M Y, H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->icon('heroicon-m-calendar-days')
+                    ->color('gray'),
             ])
-            ->filters([
-                //
+            ->defaultSort('created_at', 'desc')
+            ->filters([])
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->actions([
-                //
-            ])
-            ->bulkActions([
-                //
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
             ]);
     }
 

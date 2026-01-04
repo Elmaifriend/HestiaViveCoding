@@ -18,18 +18,35 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\FontProviders\GoogleFontProvider;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $corporateBlue = [
+            50 => '#e0e7ee',
+            100 => '#b3c5d6',
+            200 => '#85a4bd',
+            300 => '#5783a5',
+            400 => '#2a618c',
+            500 => '#004c7a',
+            600 => '#003e65',
+            700 => '#003050',
+            800 => '#00213b',
+            900 => '#001326',
+            950 => '#000810',
+        ];
+
         return $panel
             ->id('admin')
             ->path('admin')
             ->colors([
-                'primary' => Color::hex('#113f67'),
+                'primary' => $corporateBlue,
             ])
             ->login()
+            ->font('Google Sans', provider: GoogleFontProvider::class)
+            ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
