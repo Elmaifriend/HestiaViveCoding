@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('qr_code')->unique();
             $table->dateTime('expiration_date');
             $table->string('status')->default('active');
+            $table->text('description')->nullable();
+            $table->json('guest_names')->nullable();
             $table->timestamps();
         });
     }
